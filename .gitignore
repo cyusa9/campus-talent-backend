@@ -1,0 +1,74 @@
+# Compiled class files & build directories
+target/
+build/
+bin/
+out/
+*.class
+
+# Log files
+*.log
+logs/
+
+# Package files
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Maven local directory & wrapper
+.mvn/wrapper/maven-wrapper.jar
+
+# Gradle wrapper & cache
+.gradle/
+gradle-app.setting
+!gradle-wrapper.jar
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+.idea_modules/
+
+# Eclipse / STS
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache
+
+# NetBeans
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# OS Generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Environment variables & secrets
+.env
+.env.local
+*.secrets
+
+# Crash logs
+hs_err_pid*
+replay_pid*
