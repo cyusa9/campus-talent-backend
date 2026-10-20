@@ -1,5 +1,6 @@
 package auca.ac.rw.campus_talent.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -13,8 +14,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import auca.ac.rw.campus_talent.domain.Application;
+import auca.ac.rw.campus_talent.domain.ApplicationStatus;
 import auca.ac.rw.campus_talent.service.ApplicationService;
 
 @RestController
@@ -63,5 +66,17 @@ public class ApplicationController {
         } else {
             return new ResponseEntity<>(res, HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/by-status")
+    public ResponseEntity<List<Application>> getApplicationsByStatus(@RequestParam("status") ApplicationStatus status) {
+        return new ResponseEntity<>(applicationService.getApplicationsByStatus(status), HttpStatus.OK);
+    }
+
+    @GetMapping("/between")
+    public ResponseEntity<List<Application>> getApplicationsBetween(@RequestParam("start") String start, @RequestParam("end") String end) {
+        LocalDate startDate = LocalDate.parse(start);
+        LocalDate endDate = LocalDate.parse(end);
+        return new ResponseEntity<>(applicationService.getApplicationsBetween(startDate, endDate), HttpStatus.OK);
     }
 }

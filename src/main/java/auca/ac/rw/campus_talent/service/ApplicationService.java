@@ -1,11 +1,13 @@
 package auca.ac.rw.campus_talent.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import auca.ac.rw.campus_talent.domain.Application;
+import auca.ac.rw.campus_talent.domain.ApplicationStatus;
 import auca.ac.rw.campus_talent.repository.ApplicationRepository;
 
 @Service
@@ -42,5 +44,13 @@ public class ApplicationService {
         }
         applicationRepository.deleteById(id);
         return "Application deleted successfully";
+    }
+
+    public List<Application> getApplicationsByStatus(ApplicationStatus status) {
+        return applicationRepository.findByStatusOrderByApplicationDateAsc(status);
+    }
+
+    public List<Application> getApplicationsBetween(LocalDate start, LocalDate end) {
+        return applicationRepository.findByApplicationDateBetweenOrderByApplicationDateAsc(start, end);
     }
 }
