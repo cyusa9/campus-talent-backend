@@ -70,4 +70,12 @@ public class StudentController {
     public ResponseEntity<List<Student>> getStudentsByLastName(@RequestParam("lastName") String lastName) {
         return new ResponseEntity<>(studentService.getStudentsByLastName(lastName), HttpStatus.OK);
     }
+
+    @GetMapping("/of-recruiter/{recruiterId}")
+    public ResponseEntity<?> getStudentsOfRecruiter(@PathVariable UUID recruiterId) {
+        if (!studentService.recruiterExists(recruiterId)) {
+            return new ResponseEntity<>("The recruiter with that id does not exist", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(studentService.getStudentsOfRecruiter(recruiterId), HttpStatus.OK);
+    }
 }

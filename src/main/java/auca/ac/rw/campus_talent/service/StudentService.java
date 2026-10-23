@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import auca.ac.rw.campus_talent.domain.Student;
+import auca.ac.rw.campus_talent.repository.RecruiterRepository;
 import auca.ac.rw.campus_talent.repository.StudentRepository;
 
 @Service
@@ -13,6 +14,9 @@ public class StudentService {
 
     @Autowired
     private StudentRepository studentRepository;
+
+    @Autowired
+    private RecruiterRepository recruiterRepository;
 
     public String saveStudent(Student student) {
         studentRepository.save(student);
@@ -46,5 +50,13 @@ public class StudentService {
 
     public List<Student> getStudentsByLastName(String lastName) {
         return studentRepository.findByLastNameIgnoreCaseOrderByFirstNameAsc(lastName);
+    }
+
+    public boolean recruiterExists(UUID recruiterId) {
+        return recruiterRepository.existsById(recruiterId);
+    }
+
+    public List<Student> getStudentsOfRecruiter(UUID recruiterId) {
+        return studentRepository.findStudentsByRecruiterId(recruiterId);
     }
 }
