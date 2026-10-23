@@ -43,4 +43,8 @@ public class OpportunityService {
         opportunityRepository.deleteById(id);
         return "Opportunity deleted successfully";
     }
+
+    public List<Opportunity> getFreeOpportunities() {
+        return opportunityRepository.findFreeOpportunities();
+    }
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import auca.ac.rw.campus_talent.domain.Recruiter;
 import auca.ac.rw.campus_talent.service.RecruiterService;
@@ -63,5 +64,10 @@ public class RecruiterController {
         } else {
             return new ResponseEntity<>(res, HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/by-skill")
+    public ResponseEntity<List<Recruiter>> getRecruitersBySkill(@RequestParam("name") String name) {
+        return new ResponseEntity<>(recruiterService.getRecruitersBySkill(name), HttpStatus.OK);
     }
 }

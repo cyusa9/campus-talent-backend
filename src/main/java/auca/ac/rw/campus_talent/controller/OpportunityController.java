@@ -64,4 +64,9 @@ public class OpportunityController {
             return new ResponseEntity<>(res, HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/free")
+    public ResponseEntity<List<Opportunity>> getFreeOpportunities() {
+        return new ResponseEntity<>(opportunityService.getFreeOpportunities(), HttpStatus.OK);
+    }
 }

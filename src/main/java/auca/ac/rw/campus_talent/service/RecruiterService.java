@@ -43,4 +43,8 @@ public class RecruiterService {
         recruiterRepository.deleteById(id);
         return "Recruiter deleted successfully";
     }
+
+    public List<Recruiter> getRecruitersBySkill(String name) {
+        return recruiterRepository.findBySkillName(name);
+    }
 }
