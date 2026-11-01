@@ -1,8 +1,8 @@
-# CampusTalent (`campus-talent`)
+# CampusTalent
 
-- **Names**: KWIZERA Pacifique
+- **Name**: KWIZERA Pacifique
 - **Student ID**: 28054
-- **Project Name**: `campus-talent` (`campus-talent-backend`)
+- **Project Name**: campus-talent
 
 ## Steps to Run the API
 
@@ -16,6 +16,6 @@
    ```
 4. Open a terminal in the project root folder and start the application:
    ```bash
+   mvn spring-boot:run
    ```
-   *( `mvn spring-boot:run`)*
-5. The API runs at `http://localhost:8080`.
+5. The API will be accessible at `http://localhost:8080`.
