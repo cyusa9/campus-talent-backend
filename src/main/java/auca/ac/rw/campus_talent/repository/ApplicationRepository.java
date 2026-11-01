@@ -22,7 +22,7 @@ public interface ApplicationRepository extends JpaRepository<Application, UUID> 
 
     long countByStatus(ApplicationStatus status);
 
-    long countByApplicationDateAndStatusNot(LocalDate applicationDate, ApplicationStatus status);
+    long countByApplicationDate(LocalDate applicationDate);
 
     @Query("SELECT a.status, COUNT(a) FROM Application a GROUP BY a.status")
     List<Object[]> countApplicationsByStatus();

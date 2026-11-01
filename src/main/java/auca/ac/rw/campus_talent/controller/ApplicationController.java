@@ -6,6 +6,9 @@ import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,7 +33,7 @@ public class ApplicationController {
     private ApplicationService applicationService;
 
     @PostMapping("/save")
-    public ResponseEntity<?> saveApplication(@RequestBody Application application) {
+    public ResponseEntity<String> saveApplication(@RequestBody Application application) {
         String res = applicationService.saveApplication(application);
         if ("Application date cannot be in the past".equals(res)) {
             return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
@@ -66,7 +69,7 @@ public class ApplicationController {
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<?> updateStatus(@PathVariable UUID id, @RequestParam("status") ApplicationStatus status) {
+    public ResponseEntity<String> updateStatus(@PathVariable UUID id, @RequestParam("status") ApplicationStatus status) {
         String res = applicationService.updateStatus(id, status);
         if ("Application status updated successfully".equals(res)) {
             return new ResponseEntity<>(res, HttpStatus.OK);
@@ -77,7 +80,7 @@ public class ApplicationController {
         }
     }
 
-    @DeleteMapping(value = {"/{id}", "/delete/{id}"})
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteApplication(@PathVariable UUID id) {
         String res = applicationService.deleteApplication(id);
         if ("Application deleted successfully".equals(res)) {
@@ -107,19 +110,20 @@ public class ApplicationController {
     }
 
     @PatchMapping("/cancel-day")
-    public ResponseEntity<?> cancelDay(@RequestParam("recruiterId") UUID recruiterId, @RequestParam("date") String date) {
+    public ResponseEntity<String> cancelDay(@RequestParam("recruiterId") UUID recruiterId, @RequestParam("date") String date) {
         LocalDate parsedDate = LocalDate.parse(date);
         String res = applicationService.cancelDayForRecruiter(recruiterId, parsedDate);
-        if ("The recruiter with that id does not exist".equals(res)) {
-            return new ResponseEntity<>(res, HttpStatus.NOT_FOUND);
-        }
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @GetMapping("/paged")
+    @GetMapping("/page")
     public ResponseEntity<Page<Application>> getApplicationsPaged(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size) {
-        return new ResponseEntity<>(applicationService.getApplicationsPaged(page, size), HttpStatus.OK);
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "applicationDate,desc") String sort) {
+        String[] parts = sort.split(",");
+        Sort.Direction direction = parts.length > 1 && "asc".equalsIgnoreCase(parts[1].trim()) ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, parts[0].trim()));
+        return new ResponseEntity<>(applicationService.getApplicationsPaged(pageable), HttpStatus.OK);
     }
 }

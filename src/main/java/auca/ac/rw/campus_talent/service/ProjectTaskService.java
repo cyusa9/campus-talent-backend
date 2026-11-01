@@ -21,11 +21,8 @@ public class ProjectTaskService {
     @Autowired
     private ApplicationRepository applicationRepository;
 
-    public String saveProjectTask(ProjectTask projectTask) {
-        if (projectTask.getApplication() == null || projectTask.getApplication().getId() == null) {
-            return "The application with that id does not exist";
-        }
-        Optional<Application> appOpt = applicationRepository.findById(projectTask.getApplication().getId());
+    public String saveProjectTask(UUID applicationId, ProjectTask projectTask) {
+        Optional<Application> appOpt = applicationRepository.findById(applicationId);
         if (!appOpt.isPresent()) {
             return "The application with that id does not exist";
         }
@@ -39,41 +36,13 @@ public class ProjectTaskService {
         return "Project task saved successfully";
     }
 
-    public List<ProjectTask> getAllProjectTasks() {
-        return projectTaskRepository.findAll();
-    }
-
-    public Optional<ProjectTask> getProjectTaskById(UUID id) {
-        return projectTaskRepository.findById(id);
-    }
-
-    public List<ProjectTask> getProjectTasksByApplication(UUID applicationId) {
-        if (!applicationRepository.existsById(applicationId)) {
-            return null;
-        }
-        return projectTaskRepository.findByApplicationId(applicationId);
-    }
-
     public List<ProjectTask> getProjectTasksByStudentRegNumber(String regNumber) {
         return projectTaskRepository.findHistoryByStudentRegNumber(regNumber);
     }
 
-    public String updateProjectTask(UUID id, ProjectTask payload) {
-        Optional<ProjectTask> opt = projectTaskRepository.findById(id);
-        if (!opt.isPresent()) {
-            return "Project task not found";
-        }
-        ProjectTask task = opt.get();
-        task.setTaskName(payload.getTaskName());
-        task.setDescription(payload.getDescription());
-        task.setHours(payload.getHours());
-        projectTaskRepository.save(task);
-        return "Project task updated successfully";
-    }
-
     public String deleteProjectTask(UUID id) {
         if (!projectTaskRepository.existsById(id)) {
-            return "Project task not found";
+            return "The project task with that id does not exist";
         }
         projectTaskRepository.deleteById(id);
         return "Project task deleted successfully";

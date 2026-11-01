@@ -6,7 +6,6 @@ import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +13,6 @@ import auca.ac.rw.campus_talent.domain.Application;
 import auca.ac.rw.campus_talent.domain.ApplicationStatus;
 import auca.ac.rw.campus_talent.repository.ApplicationRepository;
 import auca.ac.rw.campus_talent.repository.ProjectTaskRepository;
-import auca.ac.rw.campus_talent.repository.RecruiterRepository;
 
 @Service
 public class ApplicationService {
@@ -24,9 +22,6 @@ public class ApplicationService {
 
     @Autowired
     private ProjectTaskRepository projectTaskRepository;
-
-    @Autowired
-    private RecruiterRepository recruiterRepository;
 
     public String saveApplication(Application application) {
         if (application.getApplicationDate() != null && application.getApplicationDate().isBefore(LocalDate.now())) {
@@ -89,10 +84,11 @@ public class ApplicationService {
     }
 
     public String deleteApplication(UUID id) {
-        if (!applicationRepository.existsById(id)) {
+        Optional<Application> opt = applicationRepository.findById(id);
+        if (!opt.isPresent()) {
             return "The application with that id does not exist";
         }
-        if (projectTaskRepository.existsByApplicationId(id)) {
+        if (projectTaskRepository.existsByApplication(opt.get())) {
             return "That application has project tasks, delete them first";
         }
         applicationRepository.deleteById(id);
@@ -113,17 +109,13 @@ public class ApplicationService {
 
     @Transactional
     public String cancelDayForRecruiter(UUID recruiterId, LocalDate date) {
-        if (!recruiterRepository.existsById(recruiterId)) {
-            return "The recruiter with that id does not exist";
-        }
         int count = applicationRepository.cancelApplicationsForRecruiterOnDate(
                 recruiterId, date, ApplicationStatus.REJECTED, ApplicationStatus.HIRED
         );
         return count + " applications cancelled";
     }
 
-    public Page<Application> getApplicationsPaged(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public Page<Application> getApplicationsPaged(Pageable pageable) {
         return applicationRepository.findAll(pageable);
     }
 }

@@ -1,0 +1,210 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "CampusTalent Midterm Exam",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "studentId",
+      "value": "9a596bed-ea38-44b9-81eb-3a9e686dcd1b"
+    },
+    {
+      "key": "recruiterId",
+      "value": "b91ba052-9b84-49f6-b408-6de06b4fb56a"
+    },
+    {
+      "key": "opportunityId",
+      "value": "53090647-8dd2-44bb-855b-c9deb45ac959"
+    },
+    {
+      "key": "skillId",
+      "value": "8d9724ed-9cb2-4bfb-b346-f8ba447dfad3"
+    },
+    {
+      "key": "applicationId",
+      "value": "b2e742d9-40f3-489b-ad5b-be2afdee1e66"
+    },
+    {
+      "key": "submittedApplicationId",
+      "value": "94923ca3-bae4-401a-86ed-ff56de954996"
+    },
+    {
+      "key": "taskId",
+      "value": "32abc4bc-7a62-458f-bfdd-8a7d3685373a"
+    },
+    {
+      "key": "regNumber",
+      "value": "23-0987"
+    }
+  ],
+  "item": [
+    {
+      "name": "A2",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"firstName\": \"Grace\",\n  \"lastName\": \"Mutesi\",\n  \"regNumber\": \"23-0995\",\n  \"email\": \"grace.mutesi@auca.ac.rw\",\n  \"faculty\": \"Information Technology\"\n}"
+        },
+        "url": "{{baseUrl}}/api/students/save"
+      }
+    },
+    {
+      "name": "B1",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/students/by-last-name?lastName=mutesi"
+      }
+    },
+    {
+      "name": "B2",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/applications/by-status?status=SUBMITTED"
+      }
+    },
+    {
+      "name": "B3",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/applications/between?start=2026-10-01&end=2026-10-31"
+      }
+    },
+    {
+      "name": "C1",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/recruiters/by-skill?name=java"
+      }
+    },
+    {
+      "name": "C2",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/opportunities/free"
+      }
+    },
+    {
+      "name": "C3",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/skills/unused"
+      }
+    },
+    {
+      "name": "C4",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/students/of-recruiter/{{recruiterId}}"
+      }
+    },
+    {
+      "name": "D1",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"applicationDate\": \"2026-11-26\",\n  \"coverNote\": \"Passionate about backend engineering\",\n  \"student\": {\n    \"id\": \"{{studentId}}\"\n  },\n  \"recruiter\": {\n    \"id\": \"{{recruiterId}}\"\n  }\n}"
+        },
+        "url": "{{baseUrl}}/api/applications/save"
+      }
+    },
+    {
+      "name": "D2",
+      "request": {
+        "method": "PATCH",
+        "url": "{{baseUrl}}/api/applications/{{submittedApplicationId}}/status?status=SHORTLISTED"
+      }
+    },
+    {
+      "name": "D3",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/api/recruiters/{{recruiterId}}/skills/{{skillId}}"
+      }
+    },
+    {
+      "name": "D4",
+      "request": {
+        "method": "PATCH",
+        "url": "{{baseUrl}}/api/recruiters/{{recruiterId}}/opportunity?opportunityNumber=1004"
+      }
+    },
+    {
+      "name": "E1",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"taskName\": \"Build login page\",\n  \"description\": \"React form with validation\",\n  \"hours\": 8\n}"
+        },
+        "url": "{{baseUrl}}/api/project-tasks/save?applicationId={{applicationId}}"
+      }
+    },
+    {
+      "name": "E2",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/project-tasks/student/{{regNumber}}"
+      }
+    },
+    {
+      "name": "E3",
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/api/project-tasks/delete/{{taskId}}"
+      }
+    },
+    {
+      "name": "F1",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/applications/stats/by-status"
+      }
+    },
+    {
+      "name": "F2",
+      "request": {
+        "method": "PATCH",
+        "url": "{{baseUrl}}/api/applications/cancel-day?recruiterId={{recruiterId}}&date=2026-10-20"
+      }
+    },
+    {
+      "name": "Bonus 1 - Dashboard",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/dashboard/summary"
+      }
+    },
+    {
+      "name": "Bonus 2 - Applications Page",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/applications/page?page=0&size=5&sort=applicationDate,desc"
+      }
+    }
+  ]
+}

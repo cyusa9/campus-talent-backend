@@ -30,12 +30,12 @@ public class DashboardService {
     @Autowired
     private ProjectTaskRepository projectTaskRepository;
 
-    public Map<String, Object> getSummary() {
-        Map<String, Object> summary = new LinkedHashMap<>();
+    public Map<String, Long> getSummary() {
+        Map<String, Long> summary = new LinkedHashMap<>();
         summary.put("students", studentRepository.count());
         summary.put("recruiters", recruiterRepository.count());
-        summary.put("freeOpportunities", opportunityRepository.findFreeOpportunities().size());
-        summary.put("applicationsToday", applicationRepository.countByApplicationDateAndStatusNot(LocalDate.now(), ApplicationStatus.REJECTED));
+        summary.put("freeOpportunities", (long) opportunityRepository.findFreeOpportunities().size());
+        summary.put("applicationsToday", applicationRepository.countByApplicationDate(LocalDate.now()));
         summary.put("submitted", applicationRepository.countByStatus(ApplicationStatus.SUBMITTED));
         summary.put("projectTasks", projectTaskRepository.count());
         return summary;

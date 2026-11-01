@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import auca.ac.rw.campus_talent.domain.Recruiter;
 import auca.ac.rw.campus_talent.domain.Student;
+import auca.ac.rw.campus_talent.service.RecruiterService;
 import auca.ac.rw.campus_talent.service.StudentService;
 
 @RestController
@@ -25,6 +26,9 @@ public class StudentController {
 
     @Autowired
     private StudentService studentService;
+
+    @Autowired
+    private RecruiterService recruiterService;
 
     @PostMapping("/save")
     public ResponseEntity<String> saveStudent(@RequestBody Student student) {
@@ -74,16 +78,10 @@ public class StudentController {
 
     @GetMapping("/of-recruiter/{recruiterId}")
     public ResponseEntity<?> getStudentsOfRecruiter(@PathVariable UUID recruiterId) {
-        if (!studentService.recruiterExists(recruiterId)) {
+        Optional<Recruiter> recruiterOpt = recruiterService.getRecruiterById(recruiterId);
+        if (!recruiterOpt.isPresent()) {
             return new ResponseEntity<>("The recruiter with that id does not exist", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(studentService.getStudentsOfRecruiter(recruiterId), HttpStatus.OK);
-    }
-
-    @GetMapping("/paged")
-    public ResponseEntity<Page<Student>> getStudentsPaged(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size) {
-        return new ResponseEntity<>(studentService.getStudentsPaged(page, size), HttpStatus.OK);
     }
 }
